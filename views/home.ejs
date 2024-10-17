@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Home</h1>
+    <a href="/post">Post</a><br>
+    <a href="/docc">docc</a><br
+
+    <% if(!user) { %>
+    <div>
+        <a href="/login">Login</a><br>
+    <a href="/signup">signup</a><br>
+    </div>
+    <% } %>
+    <% if(user){ %>
+    <div>
+        <a href="/logout">Logout</a><br>
+    </div>
+    <% } %>
+    
+</body>
+</html>

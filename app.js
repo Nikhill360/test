@@ -35,8 +35,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get('/home', (req, res) => {
+    res.render('home',{user:req.user});
 });
 
 app.get('/signup', (req, res) => {
@@ -46,16 +46,48 @@ app.get('/signup', (req, res) => {
 app.post('/signup',async(req, res) => {
     let {username,email,password} = req.body
     const newUser = new User({username,email})
-    await User.register(newUser,password)
-    res.redirect('/')
+    let regUser = await User.register(newUser,password)
+    req.login(regUser,(err) => {
+        if(err){
+            console.log(err)
+        }
+        res.redirect('/home')
+    })
 });
 app.get('/login', (req, res) => {
     res.render('login.ejs');
 });
 
 app.post("/login", passport.authenticate('local',{ failureRedirect: '/login' }), (req,res) => {
-    res.redirect('/')
+    res.redirect('/home')
 })
+
+app.get('/logout', (req, res) => {
+    req.logout((err) => {
+      if (err) {
+        console.log(err);
+      }
+    })
+    res.redirect('/login');
+});
+
+app.get('/post', (req, res) => {
+  console.log(req.user)
+  if(req.isAuthenticated()){
+    res.render('post');
+  }else{
+    res.redirect('/login')
+  }
+});
+
+app.get('/docc', (req, res) => {
+  console.log(req.user)
+  if(req.isAuthenticated()){
+    res.render('docc');
+  }else{
+    res.redirect('/login')
+  }
+});
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
